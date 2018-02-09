@@ -7,6 +7,7 @@
 # Problem types
 
 - `PlaneHeat` for 2d problems
+- `Heat` for 3d problems
 
 # Fields used in formulation
 
@@ -20,15 +21,16 @@ module HeatTransfer
 using FEMBase
 import FEMBase: get_unknown_field_name, assemble_elements!
 
-type PlaneHeat <: FieldProblem
-end
+type PlaneHeat <: FieldProblem end
+type Heat <: FieldProblem end
 
-function get_unknown_field_name(::Problem{PlaneHeat})
+function get_unknown_field_name(::Problem{P}) where {P<:Union{PlaneHeat,Heat}}
     return "temperature"
 end
 
-function assemble_elements!{B}(problem::Problem{PlaneHeat}, assembly::Assembly,
-                               elements::Vector{Element{B}}, time::Float64)
+function assemble_elements!(problem::Problem{P}, assembly::Assembly,
+                            elements::Vector{Element{B}}, time::Float64) where
+                            {B,P<:Union{PlaneHeat,Heat}}
 
     bi = BasisInfo(B)
     ndofs = length(bi)
@@ -55,10 +57,20 @@ function assemble_elements!{B}(problem::Problem{PlaneHeat}, assembly::Assembly,
 
 end
 
-function assemble_elements!{B<:Union{Seg2,Seg3}}(problem::Problem{PlaneHeat},
-                                                 assembly::Assembly,
-                                                 elements::Vector{Element{B}},
-                                                 time::Float64)
+function assemble_elements!(problem::Problem{PlaneHeat}, assembly::Assembly,
+                            elements::Vector{Element{B}}, time::Float64) where
+                            {B<:Union{Seg2,Seg3}}
+    assemble_boundary_elements!(problem, assembly, elements, time)
+end
+
+function assemble_elements!(problem::Problem{Heat}, assembly::Assembly,
+                            elements::Vector{Element{B}}, time::Float64) where
+                            {B<:Union{Tri3,Quad4,Tri6,Quad8,Quad9}}
+    assemble_boundary_elements!(problem, assembly, elements, time)
+end
+
+function assemble_boundary_elements!{B}(problem::Problem, assembly::Assembly,
+                                        elements::Vector{Element{B}}, time::Float64)
 
     bi = BasisInfo(B)
     ndofs = length(bi)
@@ -80,6 +92,6 @@ function assemble_elements!{B<:Union{Seg2,Seg3}}(problem::Problem{PlaneHeat},
 
 end
 
-export PlaneHeat
+export Heat, PlaneHeat
 
 end
