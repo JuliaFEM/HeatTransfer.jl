@@ -2,11 +2,8 @@
 # License is MIT: see https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/LICENSE
 
 using FEMBase
-using FEMBase: assemble_elements!
-# using FEMBase.Test
+using FEMBase.Test
 using HeatTransfer
-
-using Base.Test
 
 @testset "HeatTransfer.jl" begin
 
