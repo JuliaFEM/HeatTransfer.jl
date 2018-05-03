@@ -1,6 +1,8 @@
 # This file is a part of JuliaFEM.
 # License is MIT: see https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/LICENSE
 
+#' # Use of flux boundary condition in 2d heat problem
+
 using HeatTransfer
 using FEMBase
 using FEMBase.Test

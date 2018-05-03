@@ -1,6 +1,12 @@
 # This file is a part of JuliaFEM.
 # License is MIT: see https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/LICENSE
 
+#' # Assembling stiffness matrix and force vector for 2d heat problem
+
+using HeatTransfer
+using FEMBase
+using FEMBase.Test
+
 X = Dict(
     1 => [0.0,0.0],
     2 => [1.0,0.0],
