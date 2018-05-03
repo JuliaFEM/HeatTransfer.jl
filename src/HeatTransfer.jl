@@ -63,7 +63,7 @@ function assemble_elements!(problem::Problem{P}, assembly::Assembly,
             end
         end
         if haskey(element, "temperature")
-            T = [interpolate(element["temperature"], time)...]
+            T = [element("temperature", time)...]
             fe -= Ke*T
         end
         gdofs = get_gdofs(problem, element)
@@ -111,7 +111,7 @@ function assemble_boundary_elements!{B}(problem::Problem, assembly::Assembly,
             end
         end
         if haskey(element, "temperature")
-            T = [interpolate(element["temperature"], time)...]
+            T = [element("temperature", time)...]
             fe -= Ke*T
         end
         gdofs = get_gdofs(problem, element)
