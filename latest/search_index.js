@@ -40,4 +40,68 @@ var documenterSearchIndex = {"docs": [
     "text": "Heat equation. (2018, January 5). In Wikipedia, The Free Encyclopedia. Retrieved 00:49, January 30, 2018, from https://en.wikipedia.org/w/index.php?title=Heat_equation&oldid=818847673\nHeat transfer. (2018, January 26). In Wikipedia, The Free Encyclopedia. Retrieved 00:48, January 30, 2018, from https://en.wikipedia.org/w/index.php?title=Heat_transfer&oldid=822415173"
 },
 
+{
+    "location": "tests/test_heat_exchange_bc.html#",
+    "page": "Use of heat exchange boundary condition",
+    "title": "Use of heat exchange boundary condition",
+    "category": "page",
+    "text": "EditURL = \"https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/test/test_heat_exchange_bc.jl\"# This file is a part of JuliaFEM.\n# License is MIT: see https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/LICENSE"
+},
+
+{
+    "location": "tests/test_heat_exchange_bc.html#Use-of-heat-exchange-boundary-condition-1",
+    "page": "Use of heat exchange boundary condition",
+    "title": "Use of heat exchange boundary condition",
+    "category": "section",
+    "text": "Boundary conditions needs fields heat transfer coefficient and external temperature defined. Boundary condition is of typef = hleft(T-T_mathrmuright)using HeatTransfer\nusing FEMBase\nusing FEMBase.TestSet up initial datatic()\n\nX = Dict(\n    1 => [0.0,0.0],\n    2 => [1.0,0.0])\n\nT = Dict(\n    1 => 0.0,\n    2 => 0.0)Create element and update fieldselement = Element(Seg2, [1, 2])\nupdate!(element, \"geometry\", X)\nupdate!(element, \"temperature\", 0.0 => T)\nupdate!(element, \"heat transfer coefficient\", 6.0)\nupdate!(element, \"external temperature\", 1.0)Create problem, add elements to problem and assemble at time t=0:problem = Problem(PlaneHeat, \"test problem\", 1)\nadd_elements!(problem, [element])\nassemble!(problem, 0.0)Test for stiffness matrix boldsymbolK and force vector boldsymbolf:K = full(problem.assembly.K)\nf = full(problem.assembly.f)\n@test isapprox(K, [2.0 1.0; 1.0 2.0])\n@test isapprox(f, [3.0; 3.0])Script execution time:toc();This page was generated using Literate.jl."
+},
+
+{
+    "location": "tests/test_heat_flux_bc_2d.html#",
+    "page": "Use of flux boundary condition in 2d heat problem",
+    "title": "Use of flux boundary condition in 2d heat problem",
+    "category": "page",
+    "text": "EditURL = \"https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/test/test_heat_flux_bc_2d.jl\"# This file is a part of JuliaFEM.\n# License is MIT: see https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/LICENSE"
+},
+
+{
+    "location": "tests/test_heat_flux_bc_2d.html#Use-of-flux-boundary-condition-in-2d-heat-problem-1",
+    "page": "Use of flux boundary condition in 2d heat problem",
+    "title": "Use of flux boundary condition in 2d heat problem",
+    "category": "section",
+    "text": "using HeatTransfer\nusing FEMBase\nusing FEMBase.Test\n\nX = Dict(\n    1 => [0.0,0.0],\n    2 => [1.0,0.0])\n\nT = Dict(\n    1 => 0.0,\n    2 => 0.0)\n\nelement = Element(Seg2, [1, 2])\nupdate!(element, \"geometry\", X)\nupdate!(element, \"temperature\", 0.0 => T)\nupdate!(element, \"heat flux\", 2.0)\nproblem = Problem(PlaneHeat, \"test problem\", 1)\nadd_elements!(problem, [element])\nassemble!(problem, 0.0)\nf = full(problem.assembly.f)\nf_expected = [1.0; 1.0]\n@test isapprox(f, f_expected)This page was generated using Literate.jl."
+},
+
+{
+    "location": "tests/test_heat_flux_bc_3d.html#",
+    "page": "Use of flux boundary condition in 3d heat problem",
+    "title": "Use of flux boundary condition in 3d heat problem",
+    "category": "page",
+    "text": "EditURL = \"https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/test/test_heat_flux_bc_3d.jl\"# This file is a part of JuliaFEM.\n# License is MIT: see https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/LICENSE"
+},
+
+{
+    "location": "tests/test_heat_flux_bc_3d.html#Use-of-flux-boundary-condition-in-3d-heat-problem-1",
+    "page": "Use of flux boundary condition in 3d heat problem",
+    "title": "Use of flux boundary condition in 3d heat problem",
+    "category": "section",
+    "text": "using HeatTransfer\nusing FEMBase\nusing FEMBase.Test\n\nX = Dict(\n    1 => [0.0,0.0,0.0],\n    2 => [1.0,0.0,0.0],\n    3 => [0.0,1.0,0.0])\n\nT = Dict(\n    1 => 0.0,\n    2 => 0.0,\n    3 => 0.0)\n\nelement = Element(Tri3, [1, 2, 3])\nupdate!(element, \"geometry\", X)\nupdate!(element, \"temperature\", T)\nupdate!(element, \"heat flux\", 6.0)\nproblem = Problem(Heat, \"test problem\", 1)\nadd_elements!(problem, [element])\nassemble!(problem, 0.0)\nf = full(problem.assembly.f)\nf_expected = [1.0; 1.0; 1.0]\n@test isapprox(f, f_expected)This page was generated using Literate.jl."
+},
+
+{
+    "location": "tests/test_stiffness_matrix_and_heat_source_2d.html#",
+    "page": "Assembling stiffness matrix and force vector for 2d heat problem",
+    "title": "Assembling stiffness matrix and force vector for 2d heat problem",
+    "category": "page",
+    "text": "EditURL = \"https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/test/test_stiffness_matrix_and_heat_source_2d.jl\"# This file is a part of JuliaFEM.\n# License is MIT: see https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/LICENSE"
+},
+
+{
+    "location": "tests/test_stiffness_matrix_and_heat_source_2d.html#Assembling-stiffness-matrix-and-force-vector-for-2d-heat-problem-1",
+    "page": "Assembling stiffness matrix and force vector for 2d heat problem",
+    "title": "Assembling stiffness matrix and force vector for 2d heat problem",
+    "category": "section",
+    "text": "using HeatTransfer\nusing FEMBase\nusing FEMBase.Test\n\nX = Dict(\n    1 => [0.0,0.0],\n    2 => [1.0,0.0],\n    3 => [1.0,1.0],\n    4 => [0.0,1.0])\n\nT = Dict(\n    1 => 0.0,\n    2 => 0.0,\n    3 => 0.0,\n    4 => 0.0)\n\nelement = Element(Quad4, [1, 2, 3, 4])\nupdate!(element, \"geometry\", X)\nupdate!(element, \"temperature\", 0.0 => T)\nupdate!(element, \"thermal conductivity\", 6.0)\nupdate!(element, \"heat source\", 4.0)\n\nproblem = Problem(PlaneHeat, \"test problem\", 1)\nadd_elements!(problem, [element])\nassemble!(problem, 0.0)\nK = full(problem.assembly.K)\nf = full(problem.assembly.f)\nK_expected = [\n               4.0 -1.0 -2.0 -1.0\n              -1.0  4.0 -1.0 -2.0\n              -2.0 -1.0  4.0 -1.0\n              -1.0 -2.0 -1.0  4.0\n             ]\nf_expected = [1.0; 1.0; 1.0; 1.0]\n@test isapprox(K, K_expected)\n@test isapprox(f, f_expected)\n@test get_unknown_field_name(problem) == \"temperature\"This page was generated using Literate.jl."
+},
+
 ]}
