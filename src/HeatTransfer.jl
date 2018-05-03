@@ -14,6 +14,18 @@
 - `thermal conductivity`
 - `heat source`
 - `heat flux`
+- `external temperature`
+- `heat transfer coefficient`
+
+# References
+
+- https://en.wikipedia.org/wiki/Heat_equation
+- https://en.wikipedia.org/wiki/Heat_capacity
+- https://en.wikipedia.org/wiki/Heat_flux
+- https://en.wikipedia.org/wiki/Thermal_conduction
+- https://en.wikipedia.org/wiki/Thermal_conductivity
+- https://en.wikipedia.org/wiki/Thermal_diffusivity
+- https://en.wikipedia.org/wiki/Volumetric_heat_capacity
 
 """
 module HeatTransfer
@@ -50,6 +62,10 @@ function assemble_elements!(problem::Problem{P}, assembly::Assembly,
                 fe += s * N'*f
             end
         end
+        if haskey(element, "temperature")
+            T = [element("temperature", time)...]
+            fe -= Ke*T
+        end
         gdofs = get_gdofs(problem, element)
         add!(assembly.K, gdofs, gdofs, Ke)
         add!(assembly.f, gdofs, fe)
@@ -74,19 +90,32 @@ function assemble_boundary_elements!{B}(problem::Problem, assembly::Assembly,
 
     bi = BasisInfo(B)
     ndofs = length(bi)
+    Ke = zeros(ndofs, ndofs)
     fe = zeros(ndofs)
 
     for element in elements
         fill!(fe, 0.0)
-        for ip in get_integration_points(element)
+        fill!(Ke, 0.0)
+        for ip in get_integration_points(element, 2)
             J, detJ, N, dN = element_info!(bi, element, ip, time)
             s = ip.weight * detJ
             if haskey(element, "heat flux")
                 g = element("heat flux", ip, time)
                 fe += s * N'*g
             end
+            if haskey(element, "heat transfer coefficient") && haskey(element, "external temperature")
+                h = element("heat transfer coefficient", ip, time)
+                Tu = element("external temperature", ip, time)
+                Ke += s * h*N'*N
+                fe += s * N'*h*Tu
+            end
+        end
+        if haskey(element, "temperature")
+            T = [element("temperature", time)...]
+            fe -= Ke*T
         end
         gdofs = get_gdofs(problem, element)
+        add!(assembly.K, gdofs, gdofs, Ke)
         add!(assembly.f, gdofs, fe)
     end
 
