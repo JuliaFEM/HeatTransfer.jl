@@ -33,8 +33,8 @@ module HeatTransfer
 using FEMBase
 import FEMBase: get_unknown_field_name, assemble_elements!
 
-type PlaneHeat <: FieldProblem end
-type Heat <: FieldProblem end
+mutable struct PlaneHeat <: FieldProblem end
+mutable struct Heat <: FieldProblem end
 
 function get_unknown_field_name(::Problem{P}) where {P<:Union{PlaneHeat,Heat}}
     return "temperature"
@@ -85,8 +85,8 @@ function assemble_elements!(problem::Problem{Heat}, assembly::Assembly,
     assemble_boundary_elements!(problem, assembly, elements, time)
 end
 
-function assemble_boundary_elements!{B}(problem::Problem, assembly::Assembly,
-                                        elements::Vector{Element{B}}, time::Float64)
+function assemble_boundary_elements!(problem::Problem, assembly::Assembly,
+                                     elements::Vector{Element{B}}, time::Float64) where B
 
     bi = BasisInfo(B)
     ndofs = length(bi)
