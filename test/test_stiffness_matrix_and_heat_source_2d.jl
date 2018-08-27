@@ -1,11 +1,9 @@
 # This file is a part of JuliaFEM.
 # License is MIT: see https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/LICENSE
 
-#' # Assembling stiffness matrix and force vector for 2d heat problem
+## Assembling stiffness matrix and force vector for 2d heat problem
 
-using HeatTransfer
-using FEMBase
-using FEMBase.Test
+using FEMBase, HeatTransfer, Test, SparseArrays
 
 X = Dict(
     1 => [0.0,0.0],
@@ -28,8 +26,8 @@ update!(element, "heat source", 4.0)
 problem = Problem(PlaneHeat, "test problem", 1)
 add_elements!(problem, [element])
 assemble!(problem, 0.0)
-K = full(problem.assembly.K)
-f = full(problem.assembly.f)
+K = Matrix(sparse(problem.assembly.K))
+f = Vector(sparse(problem.assembly.f)[:])
 K_expected = [
                4.0 -1.0 -2.0 -1.0
               -1.0  4.0 -1.0 -2.0

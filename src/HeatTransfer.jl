@@ -2,7 +2,9 @@
 # License is MIT: see https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/LICENSE
 
 """
-    Heat transfer problems for JuliaFEM.
+    HeatTransfer
+
+Heat transfer analysis for JuliaFEM.
 
 # Problem types
 
@@ -30,19 +32,17 @@
 """
 module HeatTransfer
 
-using FEMBase
-import FEMBase: get_unknown_field_name, assemble_elements!
+using FEMBase, LinearAlgebra, SparseArrays
 
-mutable struct PlaneHeat <: FieldProblem end
-mutable struct Heat <: FieldProblem end
+struct PlaneHeat <: FieldProblem end
+struct Heat <: FieldProblem end
 
-function get_unknown_field_name(::Problem{P}) where {P<:Union{PlaneHeat,Heat}}
-    return "temperature"
-end
+FEMBase.get_unknown_field_name(::PlaneHeat) = "temperature"
+FEMBase.get_unknown_field_name(::Heat) = "temperature"
 
-function assemble_elements!(problem::Problem{P}, assembly::Assembly,
-                            elements::Vector{Element{B}}, time::Float64) where
-                            {B,P<:Union{PlaneHeat,Heat}}
+function FEMBase.assemble_elements!(problem::Problem{P}, assembly::Assembly,
+                                    elements::Vector{Element{B}}, time::Float64) where
+                                    {B,P<:Union{PlaneHeat,Heat}}
 
     bi = BasisInfo(B)
     ndofs = length(bi)
@@ -73,16 +73,16 @@ function assemble_elements!(problem::Problem{P}, assembly::Assembly,
 
 end
 
-function assemble_elements!(problem::Problem{PlaneHeat}, assembly::Assembly,
-                            elements::Vector{Element{B}}, time::Float64) where
-                            {B<:Union{Seg2,Seg3}}
-    assemble_boundary_elements!(problem, assembly, elements, time)
+function FEMBase.assemble_elements!(problem::Problem{PlaneHeat}, assembly::Assembly,
+                                    elements::Vector{Element{B}}, time::Float64) where
+                                    {B<:Union{Seg2,Seg3}}
+    return assemble_boundary_elements!(problem, assembly, elements, time)
 end
 
-function assemble_elements!(problem::Problem{Heat}, assembly::Assembly,
-                            elements::Vector{Element{B}}, time::Float64) where
-                            {B<:Union{Tri3,Quad4,Tri6,Quad8,Quad9}}
-    assemble_boundary_elements!(problem, assembly, elements, time)
+function FEMBase.assemble_elements!(problem::Problem{Heat}, assembly::Assembly,
+                                    elements::Vector{Element{B}}, time::Float64) where
+                                    {B<:Union{Tri3,Quad4,Tri6,Quad8,Quad9}}
+    return assemble_boundary_elements!(problem, assembly, elements, time)
 end
 
 function assemble_boundary_elements!(problem::Problem, assembly::Assembly,

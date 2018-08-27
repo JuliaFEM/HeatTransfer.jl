@@ -1,11 +1,9 @@
 # This file is a part of JuliaFEM.
 # License is MIT: see https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/LICENSE
 
-#' # Use of flux boundary condition in 3d heat problem
+## Use of flux boundary condition in 3d heat problem
 
-using HeatTransfer
-using FEMBase
-using FEMBase.Test
+using FEMBase, Test, HeatTransfer, SparseArrays
 
 X = Dict(
     1 => [0.0,0.0,0.0],
@@ -24,6 +22,6 @@ update!(element, "heat flux", 6.0)
 problem = Problem(Heat, "test problem", 1)
 add_elements!(problem, [element])
 assemble!(problem, 0.0)
-f = full(problem.assembly.f)
+f = Vector(sparse(problem.assembly.f)[:])
 f_expected = [1.0; 1.0; 1.0]
 @test isapprox(f, f_expected)
