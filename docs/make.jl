@@ -17,7 +17,7 @@ for test_file in readdir(testdir)
 end
 
 makedocs(modules=[HeatTransfer],
-         format = :html,
+         format = Documenter.HTML(),
          checkdocs = :all,
          sitename = "HeatTransfer.jl",
          pages = [
