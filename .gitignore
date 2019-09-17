@@ -1,6 +1,7 @@
 docs/build/
 docs/site/
 docs/src/tests
+docs/Manifest.toml
 *.cov
 *.pyc
 *.swp

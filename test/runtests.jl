@@ -3,8 +3,6 @@
 
 using FEMBase, HeatTransfer, Test, SparseArrays, LinearAlgebra
 
-include("../docs/make.jl")
-
 @testset "HeatTransfer.jl" begin
 
     @testset "stiffness matrix and heat source boundary condition" begin
@@ -24,5 +22,3 @@ include("../docs/make.jl")
     end
 
 end
-
-include("../docs/deploy.jl")
