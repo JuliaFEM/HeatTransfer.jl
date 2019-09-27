@@ -1,7 +1,7 @@
 # This file is a part of JuliaFEM.
 # License is MIT: see https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/LICENSE
 
-## Use of heat exchange boundary condition
+# # Use of heat exchange boundary condition
 #
 # Boundary conditions needs fields `heat transfer coefficient` and
 # `external temperature` defined. Boundary condition is of type
