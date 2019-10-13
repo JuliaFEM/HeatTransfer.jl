@@ -1,7 +1,7 @@
 # This file is a part of JuliaFEM.
 # License is MIT: see https://github.com/JuliaFEM/HeatTransfer.jl/blob/master/LICENSE
 
-# ## Assembling stiffness matrix and force vector for 2d heat problem
+# # Assembling stiffness matrix and force vector for 2d heat problem
 
 using FEMBase, HeatTransfer, Test, SparseArrays
 
